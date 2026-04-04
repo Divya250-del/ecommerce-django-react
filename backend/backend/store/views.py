@@ -6,16 +6,41 @@ from .serializers import RegisterSerializer, UserSerializer
 from rest_framework import status
 from .models import Product, Category,Cart,CartItem,Order,OrderItem
 from .serializers import ProductSerializer,CategorySerializer,CartItemSerializer,CartSerializer
+from rest_framework.pagination import PageNumberPagination
+from .filters import ProductFilter
 
 
 
+
+class ProductPagination(PageNumberPagination):   # ← new
+    page_size = 6
+    page_size_query_param = 'page_size'
+    max_page_size = 50
 
 
 @api_view(['GET'])
 def get_products(request):
-    products = Product.objects.all()
-    serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
+    queryset = Product.objects.select_related('category').all()
+
+    filterset = ProductFilter(request.GET, queryset=queryset)
+    if filterset.is_valid():
+        queryset = filterset.qs
+
+    search = request.GET.get('search', '')
+    if search:
+        queryset = queryset.filter(name__icontains=search)
+
+    ordering = request.GET.get('ordering', '-created_at')
+    allowed_ordering = ['price', '-price', 'name', '-name', 'created_at', '-created_at']
+    if ordering in allowed_ordering:
+        queryset = queryset.order_by(ordering)
+
+    paginator = ProductPagination()
+    result_page = paginator.paginate_queryset(queryset, request)
+    serializer = ProductSerializer(result_page, many=True, context={'request': request})
+    return paginator.get_paginated_response(serializer.data)
+
+
 
 @api_view(['GET'])
 def get_product(request,pk):
