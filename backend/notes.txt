@@ -1,0 +1,22 @@
+POSTGRES COMMANDS:
+psql --version -> check version
+psql postgres -> to enter into postgres shell
+Create ROLE ecomm_divya  WITH LOGIN PASSWORD 'admin'; -> create user ecomm_divya with admin password
+ALTER ROLE ecomm_divya SUPERUSER CREATEDB CREATEROLE;
+CREATE DATABASE ecommerce_db OWNER ecomm_divya;
+
+==============================================================================================================
+
+pgadmin password = odoo
+postgres user = ecomm_divya
+postgres password = admin
+
+postgres super user password = odoo
+
+
+===============================================================================================================
+
+Django 
+super user - admin
+password - admin
+email - admin@gmail.com
