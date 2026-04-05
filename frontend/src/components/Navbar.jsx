@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { clearTokens,getAccessToken } from "../utils/auth";
+import { clearTokens,getAccessToken, getRole  } from "../utils/auth";
+
 
 function Navbar(){
 
@@ -14,6 +15,7 @@ function Navbar(){
     );
 
     const isLoggedIn = !!getAccessToken();
+    const role = getRole();  // ← 'admin' or 'customer' or null
 
     const handleLogout = () => {
         clearTokens();
@@ -37,24 +39,34 @@ function Navbar(){
                     </Link>
                     </>
                 ):(
+                                        <>
+                        {/* Admin sees Analytics link */}
+                        {role === 'admin' && (
+                            <Link to='/admin/analytics' className="text-purple-600 hover:text-purple-800 font-medium">
+                                Analytics
+                            </Link>
+                        )}
+
+                        {/* Customer sees Cart link */}
+                        {role === 'customer' && (
+                            <Link to='/cart' className="relative text-gray-800 hover:text-gray-600 font-medium">
+                                Cart
+                                {cartCount > 0 && (
+                                    <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs rounded-full px-1">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </Link>
+                        )}
                     <button onClick={handleLogout} className="text-gray-800 hover:text-gray-600 font-medium">
                         Logout
                     </button>
+                    </>
                 )}
 
 
             </div>
-             <Link to='/cart' className="relative text-gray-800 hover:text-gray-600 font-medium">
-             Cart
-             {
-                cartCount > 0 && (
-
-                    <span>
-                        {cartCount}
-                    </span>
-                )
-             }
-            </Link>
+            
         </nav>
     )
 

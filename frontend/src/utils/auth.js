@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode" 
 export const saveToken = (token) => {
 
     localStorage.setItem("access_token",token.access);
@@ -15,6 +16,16 @@ export const getAccessToken = () =>{
         return localStorage.getItem("access_token");
 
 
+}
+export const getRole = () => {
+    const token = getAccessToken();
+    if (!token) return null;
+    try {
+        const decoded = jwtDecode(token);
+        return decoded.role;  // 'admin' or 'customer'
+    } catch {
+        return null;
+    }
 }
 
 export const authFetch = (url, options = {}) =>{

@@ -8,6 +8,13 @@ from .models import Product, Category,Cart,CartItem,Order,OrderItem
 from .serializers import ProductSerializer,CategorySerializer,CartItemSerializer,CartSerializer
 from rest_framework.pagination import PageNumberPagination
 from .filters import ProductFilter
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
+from .permissions import IsAdminUser, IsCustomerUser
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 
@@ -114,7 +121,7 @@ def update_cart_quantity(request):
     
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated,IsCustomerUser])
 def create_order(request):
     try:
         data = request.data
