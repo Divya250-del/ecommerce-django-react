@@ -8,6 +8,7 @@ import PrivateRouter from "./components/PrivateRouter";
 import AdminRouter from "./components/AdminRouter";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import SignupRole from "./pages/SignupRole";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 
 function App(){
@@ -21,6 +22,8 @@ return(
     <Route path="/product/:id" element={<ProductDetails/>}/>   
     <Route path="/login" element={<Login/>}/>
     <Route path="/signup" element={<Signup/>}/>
+    <Route path="/signup-role" element={<SignupRole />} />
+
     
     {/* Customer Routes */}
     <Route  element={<PrivateRouter/>}>

@@ -1,75 +1,127 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { clearTokens,getAccessToken, getRole  } from "../utils/auth";
+import { clearTokens, getAccessToken, getRole } from "../utils/auth";
 
+function Navbar() {
+  const { cartItems } = useCart();
+  const navigate = useNavigate();
 
-function Navbar(){
-
-    const {cartItems} = useCart();
-    const navigate = useNavigate();
-   
-
-    const cartCount = cartItems?.reduce(
+  const cartCount = cartItems?.reduce(
     (total, item) => total + (item.quantity || 0),
     0
-    );
+  );
 
-    const isLoggedIn = !!getAccessToken();
-    const role = getRole();  // ← 'admin' or 'customer' or null
+  const isLoggedIn = !!getAccessToken();
+  const role = getRole();
 
-    const handleLogout = () => {
-        clearTokens();
-        navigate("/login");
-    }
+  const handleLogout = () => {
+    clearTokens();
+    navigate("/login");
+  };
 
-    return (
-        <nav className="bg-white shadow-md px-6 flex justify-between items-center">
-            <Link to='/' className='text-2xl font-bold text-gray-800'>
-            Divya Cart
-            </Link>
+  return (
+    <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+      <div className="max-w-7xl mx-auto px-5 py-4 flex items-center gap-6">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 text-2xl font-bold">
+          <span className="text-3xl">🛒</span>
+          <span className="text-blue-600">Divya</span>
+          <span className="text-slate-900">Cart</span>
+        </Link>
 
-            <div className="flex items-center gap-6">
-                {!isLoggedIn ?(
-                    <>
-                    <Link to='/login' className="text-gray-8000 hover:text-gray-600 font-medium">
-                    Login
-                    </Link>
-                     <Link to='/signup' className="text-gray-8000 hover:text-gray-600 font-medium">
-                    Sign Up
-                    </Link>
-                    </>
-                ):(
-                                        <>
-                        {/* Admin sees Analytics link */}
-                        {role === 'admin' && (
-                            <Link to='/admin/analytics' className="text-purple-600 hover:text-purple-800 font-medium">
-                                Analytics
-                            </Link>
-                        )}
+        {/* Category */}
+        <select className="hidden md:block border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 text-sm outline-none">
+          <option>All Categories</option>
+          <option>Electronics</option>
+          <option>Beauty</option>
+          <option>Sports</option>
+          <option>Home</option>
+        </select>
 
-                        {/* Customer sees Cart link */}
-                        {role === 'customer' && (
-                            <Link to='/cart' className="relative text-gray-800 hover:text-gray-600 font-medium">
-                                Cart
-                                {cartCount > 0 && (
-                                    <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs rounded-full px-1">
-                                        {cartCount}
-                                    </span>
-                                )}
-                            </Link>
-                        )}
-                    <button onClick={handleLogout} className="text-gray-800 hover:text-gray-600 font-medium">
-                        Logout
-                    </button>
-                    </>
-                )}
+        {/* Search */}
+        <div className="hidden md:flex flex-1">
+          <input
+            type="text"
+            placeholder="Search for products..."
+            className="w-full border border-slate-200 rounded-l-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-200"
+          />
+          <button className="bg-blue-600 text-white px-7 rounded-r-xl font-semibold hover:bg-blue-700">
+            Search
+          </button>
+        </div>
 
+        {/* Right Menu */}
+        <div className="flex items-center gap-5 text-sm font-semibold">
+          {!isLoggedIn ? (
+            <>
+              <Link to="/login" className="hover:text-blue-600">
+                👤 Login
+              </Link>
+              <Link to="/signup-role" className="hover:text-blue-600">
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            <>
+              {role === "admin" && (
+                <Link
+                  to="/admin/analytics"
+                  className="text-purple-600 hover:text-purple-800"
+                >
+                  📊 Analytics
+                </Link>
+              )}
 
-            </div>
-            
-        </nav>
-    )
+              {role === "customer" && (
+                <Link to="/cart" className="relative hover:text-blue-600">
+                  🛒 Cart
+                  {cartCount > 0 && (
+                    <span className="absolute -top-3 -right-4 bg-blue-600 text-white text-xs rounded-full px-1.5">
+                      {cartCount}
+                    </span>
+                  )}
+                </Link>
+              )}
 
+              <button
+                onClick={handleLogout}
+                className="hover:text-red-600 font-semibold"
+              >
+                Logout
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Second Nav Row */}
+      <div className="max-w-7xl mx-auto px-5 py-3 hidden md:flex items-center gap-10 text-sm font-medium">
+        <button className="bg-blue-600 text-white px-5 py-2 rounded-lg">
+          ☰ Shop by Category
+        </button>
+
+        <Link to="/" className="text-blue-600 border-b-2 border-blue-600 pb-2">
+          Home
+        </Link>
+
+        <Link to="/" className="hover:text-blue-600">
+          Products
+        </Link>
+
+        <Link to="/" className="hover:text-blue-600">
+          Deals
+        </Link>
+
+        <Link to="/" className="hover:text-blue-600">
+          About Us
+        </Link>
+
+        <Link to="/" className="hover:text-blue-600">
+          Contact Us
+        </Link>
+      </div>
+    </header>
+  );
 }
 
-export default Navbar
+export default Navbar;
