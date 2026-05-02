@@ -1,5 +1,4 @@
 from .auth_serializers import (
-    CustomTokenObtainPairSerializer,
     RegisterSerializer,
     UserSerializer,
 )
@@ -13,3 +12,4 @@ from .cart_serializers import (
     CartSerializer,
     CartItemSerializer,
 )
+from .order_serializers import OrderSerializer, OrderItemSerializer

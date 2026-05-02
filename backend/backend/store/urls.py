@@ -10,9 +10,14 @@ from store.views import (
     RemoveFromCartView,
     UpdateCartQuantityView,
     CreateOrderView,
-    CustomTokenObtainPairView,
     RegisterView,
+    MyOrdersView,
+    CookieLoginView,
+    LogoutView,
+    MeView
 )
+
+
 
 
 
@@ -20,8 +25,9 @@ from store.views import (
 urlpatterns = [
     # 🔐 Auth
     path('register/', RegisterView.as_view(), name='register'),
-    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path("login/", CookieLoginView.as_view(), name="cookie-login"),
+    path("logout/", LogoutView.as_view(), name="logout"),
+    path("me/", MeView.as_view(), name="me"),
 
     # 🛍 Products
     path('products/', ProductListView.as_view(), name='product-list'),
@@ -37,5 +43,6 @@ urlpatterns = [
     path('cart/update/', UpdateCartQuantityView.as_view(), name='update-cart'),
 
     # 📦 Orders
+    path("orders/", MyOrdersView.as_view(), name="my-orders"),
     path('orders/create/', CreateOrderView.as_view(), name='create-order'),
 ]

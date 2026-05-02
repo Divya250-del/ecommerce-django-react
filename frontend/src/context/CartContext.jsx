@@ -1,6 +1,7 @@
 import { createContext, useContext, useState,useEffect } from "react";
-import { authFetch, getAccessToken } from "../utils/auth";
+import { authFetch } from "../utils/auth";
 const CartContext = createContext();
+import { getCartApi,addToCartApi,removeFromCartApi,updateCartQuantityApi} from "../api/cartApi";
 
 
 
@@ -11,10 +12,16 @@ export const CartProvider = ({children}) => {
 
     const fetchCart = async () => {
         try{
-            const res = await authFetch(`${BASEURL}/api/cart/`)        
-            const data = await res.json();
+            
+            const data = await getCartApi();
+            // const res = await authFetch(`${BASEURL}/api/cart/`)        
+            // const data = await res.json();
             setCartItems(data.items || []);
             setTotal(data.total || []);
+
+
+                  
+            
             
 
         }

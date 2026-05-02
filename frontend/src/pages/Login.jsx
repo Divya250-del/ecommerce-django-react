@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { saveToken } from "../utils/auth";
+import { loginApi } from "../api/cartApi";
+
 
 function Login() {
   const BASE = import.meta.env.VITE_DJANGO_BASE_URL;
@@ -21,26 +22,15 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${BASE}/api/token/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      
+      const data = await loginApi(form);
+      console.log(data);
+      setMsg("Login successful! Redirecting...");
 
-      const data = await response.json();
 
-      if (response.ok) {
-        saveToken(data);
-        setMsg("Login successful! Redirecting...");
+      navigate("/");
 
-        setTimeout(() => {
-          navigate("/");
-        }, 800);
-      } else {
-        setMsg(data.detail || "Login failed. Please try again.");
-      }
+      
     } catch (error) {
       setMsg("An error occurred. Please try again.");
     } finally {

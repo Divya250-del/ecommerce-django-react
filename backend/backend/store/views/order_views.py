@@ -4,6 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from store.models import Cart, Order, OrderItem
 from store.permissions import IsCustomerUser
+from rest_framework.generics import ListAPIView
+from store.serializers import OrderSerializer
 
 
 class CreateOrderView(APIView):
@@ -59,3 +61,15 @@ class CreateOrderView(APIView):
 
         except Exception as e:
             return Response({"error": str(e)}, status=500)
+
+class MyOrdersView(ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated, IsCustomerUser]
+
+    def get_queryset(self):
+        return (
+            Order.objects
+            .filter(user=self.request.user)
+            .prefetch_related("items__product")
+            .order_by("-created_at")
+        )

@@ -1,23 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
 from store.models import UserProfile
-
-
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        try:
-            profile = UserProfile.objects.get(user=user)
-            token["role"] = profile.role
-        except UserProfile.DoesNotExist:
-            token["role"] = "customer"
-
-        token["username"] = user.username
-        return token
 
 
 class UserSerializer(serializers.ModelSerializer):

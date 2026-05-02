@@ -6,7 +6,7 @@ import {
     PieChart, Pie, Cell, Legend
 } from "recharts";
 
-import { getAccessToken  } from "../utils/auth";
+
 
 const BASE_URL = "http://127.0.0.1:8000/api/analytic";
 
@@ -20,7 +20,7 @@ function AnalyticsDashboard() {
     const [loading, setLoading]               = useState(true);
 
     useEffect(() => {
-        const token = getAccessToken();
+        const token = true
         const headers = { Authorization: `Bearer ${token}` };
 
 

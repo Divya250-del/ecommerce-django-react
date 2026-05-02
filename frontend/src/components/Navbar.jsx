@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { clearTokens, getAccessToken, getRole } from "../utils/auth";
 
 function Navbar() {
   const { cartItems } = useCart();
@@ -11,11 +10,11 @@ function Navbar() {
     0
   );
 
-  const isLoggedIn = !!getAccessToken();
-  const role = getRole();
+  const isLoggedIn = true
+  const role = 'customer'
 
   const handleLogout = () => {
-    clearTokens();
+    // clearTokens();
     navigate("/login");
   };
 
