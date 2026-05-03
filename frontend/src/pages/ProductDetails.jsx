@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { getProductByIdApi } from "../api/productApi";
 
 function ProductDetails(){
     const {id} = useParams();
@@ -14,23 +15,21 @@ function ProductDetails(){
 
 
 
-    useEffect( () =>{
-        fetch(`${BASEURL}/api/products/${id}`)
-        .then((response) =>{
-            if(!response.ok){
-                throw new Error("Failed to fetch products");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            setProduct(data);
-            setLoading(false);
-        })
-        .catch((error) => {
-            setError(error.message);
-            setLoading(false);
-        });
-    },[]);
+ useEffect(() => {
+  const fetchProduct = async () => {
+    setLoading(true);
+    try {
+      const data = await getProductByIdApi(id);
+      setProduct(data);
+    } catch (error) {
+      setError(error.error || "Failed to fetch product");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProduct();
+}, [id]);
     
     if(loading){
         return <div>Loading...</div>
@@ -41,10 +40,10 @@ function ProductDetails(){
     }
 
     const handleAddToCart = () =>{
-        if(!localStorage.getItem('access_token')){
-            window.location.href = "/login";
-            return;
-        }
+        // if(!localStorage.getItem('access_token')){
+        //     window.location.href = "/login";
+        //     return;
+        // }
 
         addToCart(product.id);
     }

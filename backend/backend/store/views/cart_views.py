@@ -4,10 +4,11 @@ from rest_framework.permissions import IsAuthenticated
 
 from store.models import Product, Cart, CartItem
 from store.serializers import CartSerializer, CartItemSerializer
+from store.permissions import IsCustomerUser
 
 
 class CartDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,IsCustomerUser]
 
     def get(self, request):
         cart, created = Cart.objects.get_or_create(user=request.user)

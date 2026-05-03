@@ -8,7 +8,7 @@ import {
 
 
 
-const BASE_URL = "http://127.0.0.1:8000/api/analytic";
+const BASE_URL = "http://localhost:8000/api/analytic";
 
 const COLORS = ["#8b5cf6", "#06b6d4", "#f59e0b", "#10b981", "#ef4444"];
 

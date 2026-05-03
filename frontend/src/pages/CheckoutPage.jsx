@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {useNavigate} from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { authFetch } from "../utils/auth";
+import { createOrderApi } from "../api/orderApi";
 
 function CheckoutPage(){
     const BASEURL = import.meta.env.VITE_DJANGO_BASE_URL;
@@ -30,40 +30,20 @@ function CheckoutPage(){
         setLoading(true);
         setMessage("");
 
-        try{
-            const response = await authFetch(`${BASEURL}/api/orders/create/`,{
-            method: "POST",
-            headers:{
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(form),
-            });
-            const data = await response.json();
+        try {
+            const data = await createOrderApi(form);
 
-            if (response.ok){
-                setMessage("Order Placed successfully")
-             
-                clearCart();
-                setTimeout(() => {
-                    navigate("/");
+            setMessage("Order Placed successfully");
 
-                },2000);
+            clearCart();
 
+            setTimeout(() => {
+            navigate("/");
+            }, 2000);
 
-            }
-            else{
-                setMessage(data.error || "Failed to place order. Please try again.");
-
-
-            }
-
-           
-        }
-        catch(error){
-            setMessage("An error occured. Please try again");
-
-        }
-        finally{
+        } catch (error) {
+            setMessage(error.error || "Failed to place order. Please try again.");
+        } finally {
             setLoading(false);
         }
 

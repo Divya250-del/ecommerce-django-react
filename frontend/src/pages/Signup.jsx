@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { registerApi } from "../api/authApi";
 
 
 
@@ -45,32 +46,17 @@ function Signup() {
     }
 
     setLoading(true);
-
     try {
-      const response = await fetch(`${BASE}/api/register/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...form,
-          role: role || "customer"
-        })
-      });
+      const data = await registerApi(form, role);
 
-      const data = await response.json();
+      setMsg("Account created successfully! Redirecting to login...");
 
-      if (response.ok) {
-        setMsg("Account created successfully! Redirecting to login...");
+      setTimeout(() => {
+        navigate("/login");
+      }, 800);
 
-        setTimeout(() => {
-          navigate("/login");
-        }, 800);
-      } else {
-        setMsg(getErrorMessage(data));
-      }
     } catch (error) {
-      setMsg("An error occurred. Please try again.");
+      setMsg(getErrorMessage(error));
     } finally {
       setLoading(false);
     }

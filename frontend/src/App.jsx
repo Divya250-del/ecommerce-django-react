@@ -26,10 +26,9 @@ return(
 
     
     {/* Customer Routes */}
-    <Route  element={<PrivateRouter/>}>
         <Route path="/cart" element={<CartPage/>}/>
         <Route path="/checkout" element={<CheckoutPage/>}/>  
-    </Route>/
+
 
     {/* Admin Routes */}
     <Route  element={<AdminRouter/>}>

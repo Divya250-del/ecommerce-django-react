@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
+import { getProductsApi } from "../api/productApi";
 
 function ProductList() {
   const [products, setProducts] = useState([]);
@@ -18,40 +19,32 @@ function ProductList() {
 
   const BASEURL = import.meta.env.VITE_DJANGO_BASE_URL;
 
-  const buildUrl = () => {
-    let url = `${BASEURL}/api/products/?page=${currentPage}`;
+  
 
-    if (search) url += `&search=${search}`;
-    if (ordering) url += `&ordering=${ordering}`;
-    if (minPrice) url += `&min_price=${minPrice}`;
-    if (maxPrice) url += `&max_price=${maxPrice}`;
+   const fetchProducts = async () => {
+  setLoading(true);
+  setError(null);
 
-    return url;
-  };
+  try {
+    const data = await getProductsApi({
+      page: currentPage,
+      search,
+      ordering,
+      min_price: minPrice,
+      max_price: maxPrice,
+    });
 
-  const fetchProducts = (url) => {
-    setLoading(true);
-    setError(null);
+    setProducts(data.results || []);
+    setCount(data.count || 0);
+    setNextUrl(data.next);
+    setPrevUrl(data.previous);
 
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch products");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setProducts(data.results || []);
-        setCount(data.count || 0);
-        setNextUrl(data.next);
-        setPrevUrl(data.previous);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message);
-        setLoading(false);
-      });
-  };
+  } catch (error) {
+    setError(error.error || "Failed to fetch products");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleNext = () => {
     if (nextUrl) setCurrentPage((prev) => prev + 1);
@@ -63,13 +56,15 @@ function ProductList() {
 
   const handleSearch = () => {
     setCurrentPage(1);
-    fetchProducts(`${BASEURL}/api/products/?page=1${search ? `&search=${search}` : ""}${ordering ? `&ordering=${ordering}` : ""}${minPrice ? `&min_price=${minPrice}` : ""}${maxPrice ? `&max_price=${maxPrice}` : ""}`);
+    fetchProducts();
   };
+
+ 
 
   const totalPages = Math.ceil(count / 6);
 
   useEffect(() => {
-    fetchProducts(buildUrl());
+    fetchProducts();
   }, [currentPage, ordering]);
 
   return (

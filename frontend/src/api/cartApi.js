@@ -8,6 +8,17 @@ export const loginApi = async (formData) => {
   return response;
 };
 
+
+
+export const createCartApi = async () => {
+  try {
+    const response = await apiClient.post("/api/createcart/");
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Failed to create cart" };
+  }
+};
+
 export const getCartApi = async () => {
   const response = await apiClient.get("/api/cart/");
   return response.data;

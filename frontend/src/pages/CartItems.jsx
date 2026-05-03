@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createCartApi } from "../api/cartApi";
 
 function CartItems() {
     const BASEURL = import.meta.env.VITE_DJANGO_BASE_URL;
@@ -6,27 +7,14 @@ function CartItems() {
     const [cart, setCart] = useState(null);
 
     useEffect(() => {
-        console.log("BASEURL:", BASEURL);
 
-        fetch(`${BASEURL}/api/createcart/`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Failed to fetch cart");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            console.log("Cart created:", data);
-            setCart(data);
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
+        try {
+        const data = await createCartApi();
+        console.log("Cart created:", data);
+        setCart(data);
+        } catch (error) {
+        console.error("Error:", error);
+        }
 
     }, []);
 

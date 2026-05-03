@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { logoutApi } from "../api/authApi";
 
 function Navbar() {
   const { cartItems } = useCart();
@@ -13,9 +14,13 @@ function Navbar() {
   const isLoggedIn = true
   const role = 'customer'
 
-  const handleLogout = () => {
-    // clearTokens();
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      await logoutApi();   // 🔥 cookie delete
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
   return (

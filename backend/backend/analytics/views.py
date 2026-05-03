@@ -6,11 +6,11 @@ from django.db.models.functions import TruncDay
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Sum, Count, F, FloatField, ExpressionWrapper
-from store.permissions import IsAdminUser, IsCustomerUser
+from store.permissions import  IsCustomerUser
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# @permission_classes([IsAdminUser])
 def get_summary(request):
     """
     Total Revenue, Total Orders, Total Customers
@@ -31,7 +31,7 @@ def get_summary(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# @permission_classes([IsAdminUser])
 def get_revenue(request):
     """
     Daily revenue for last 30 days
@@ -57,7 +57,7 @@ def get_revenue(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# @permission_classes([IsAdminUser])
 def get_top_products(request):
     """
     Top 10 Best Selling Products by Revenue
@@ -88,7 +88,7 @@ def get_top_products(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# @permission_classes([IsAdminUser])
 def get_orders_by_status(request):
     """
     Count of orders grouped by status

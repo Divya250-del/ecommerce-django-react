@@ -1,5 +1,4 @@
 import { createContext, useContext, useState,useEffect } from "react";
-import { authFetch } from "../utils/auth";
 const CartContext = createContext();
 import { getCartApi,addToCartApi,removeFromCartApi,updateCartQuantityApi} from "../api/cartApi";
 
@@ -14,8 +13,6 @@ export const CartProvider = ({children}) => {
         try{
             
             const data = await getCartApi();
-            // const res = await authFetch(`${BASEURL}/api/cart/`)        
-            // const data = await res.json();
             setCartItems(data.items || []);
             setTotal(data.total || []);
 
@@ -40,13 +37,8 @@ export const CartProvider = ({children}) => {
     // Add Product to Cart
     const addToCart = async(productID) => {
         try{
-            await authFetch(`${BASEURL}/api/cart/add/`,{
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({product_id:  productID}),
-            });
+            await addToCartApi(productID);
+            
             fetchCart();
 
         }
@@ -59,13 +51,7 @@ export const CartProvider = ({children}) => {
     // Remove Product from cart
     const removeFromCart = async(itemId) => {
         try{
-                await authFetch(`${BASEURL}/api/cart/remove/`,{
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({item_id: itemId}),
-            });
+                await removeFromCartApi(itemId);
             fetchCart();
 
         }
@@ -83,14 +69,8 @@ export const CartProvider = ({children}) => {
                 return ;
             }
             try{
-                await authFetch(`${BASEURL}/api/cart/update/`,{
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({item_id: itemId,quantity:quantity}),
-            });
-            fetchCart();
+                await updateCartQuantityApi(itemId,quantity);
+                fetchCart();
 
         }
         catch(error){
