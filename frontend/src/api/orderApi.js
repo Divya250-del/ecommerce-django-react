@@ -9,3 +9,14 @@ export const createOrderApi = async (form) => {
     throw error.response?.data || { error: "Failed to place order" };
   }
 };
+
+// Logged in User Orders
+// 🧾 CREATE ORDER
+export const getMyOrdersApi = async () => {
+  try {
+    const response = await apiClient.get("/api/orders/");
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Failed to fetch order" };
+  }
+};

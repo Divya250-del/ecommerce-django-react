@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import SignupRole from "./pages/SignupRole";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
+import OrderPage from "./pages/OrderPage";
 
 function App(){
 return(
@@ -27,7 +28,8 @@ return(
     
     {/* Customer Routes */}
         <Route path="/cart" element={<CartPage/>}/>
-        <Route path="/checkout" element={<CheckoutPage/>}/>  
+        <Route path="/checkout" element={<CheckoutPage/>}/>
+        <Route path="/my-orders" element={<OrderPage/>}/>    
 
 
     {/* Admin Routes */}

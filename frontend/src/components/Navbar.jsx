@@ -89,16 +89,21 @@ function Navbar() {
               )}
 
               {role === "customer" && (
-                <Link to="/cart" className="relative hover:text-blue-600">
-                  🛒 Cart
-                  {cartCount > 0 && (
-                    <span className="absolute -top-3 -right-4 bg-blue-600 text-white text-xs rounded-full px-1.5">
-                      {cartCount}
-                    </span>
-                  )}
-                </Link>
-              )}
+                <>
+                  <Link to="/my-orders" className="hover:text-blue-600">
+                    📦 My Orders
+                  </Link>
 
+                  <Link to="/cart" className="relative hover:text-blue-600">
+                    🛒 Cart
+                    {cartCount > 0 && (
+                      <span className="absolute -top-3 -right-4 bg-blue-600 text-white text-xs rounded-full px-1.5">
+                        {cartCount}
+                      </span>
+                    )}
+                  </Link>
+                </>
+              )}
               <button
                 onClick={handleLogout}
                 className="hover:text-red-600 font-semibold"
