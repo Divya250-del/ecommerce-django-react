@@ -1,22 +1,34 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { logoutApi } from "../api/authApi";
+import { useAuth } from "../context/AuthContext";
+
+
 
 function Navbar() {
   const { cartItems } = useCart();
   const navigate = useNavigate();
+  const { user, setUser } = useAuth();
 
   const cartCount = cartItems?.reduce(
     (total, item) => total + (item.quantity || 0),
     0
   );
+  const isLoggedIn = !!user;
+  const role = user?.role;
 
-  const isLoggedIn = true
-  const role = 'customer'
+  
+
+
+
+
+
+
 
   const handleLogout = async () => {
     try {
-      await logoutApi();   // 🔥 cookie delete
+      await logoutApi();// 🔥 cookie delete
+      setUser(null);
       navigate("/login");
     } catch (error) {
       console.error("Logout failed", error);
@@ -93,6 +105,7 @@ function Navbar() {
               >
                 Logout
               </button>
+              
             </>
           )}
         </div>

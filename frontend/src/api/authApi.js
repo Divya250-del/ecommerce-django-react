@@ -15,6 +15,16 @@ export const registerApi = async (form, role) => {
   }
 };
 
+// 👤 GET CURRENT USER
+export const getMeApi = async () => {
+  try {
+    const response = await apiClient.get("/api/me/");
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { error: "Failed to fetch user" };
+  }
+};
+
 export const logoutApi = async () => {
   const response = await apiClient.post("/api/logout/");
   return response.data;
