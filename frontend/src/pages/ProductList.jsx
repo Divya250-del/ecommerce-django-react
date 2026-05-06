@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import ProductCard from "../components/ProductCard";
 import { getProductsApi } from "../api/productApi";
+import { getCategoriesApi } from "../api/categoryApi";
 import { useSearchParams } from "react-router-dom";
 
 
@@ -18,11 +19,22 @@ function ProductList() {
   const [ordering, setOrdering] = useState("-created_at");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [categories, setCategories] = useState([]);
+
 
   const [searchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category");
 
   const BASEURL = import.meta.env.VITE_DJANGO_BASE_URL;
+    const productRef = useRef(null);
+
+const scrollToProducts = () => {
+  productRef.current?.scrollIntoView({
+    behavior: "smooth",
+  });
+};
+
+
 
   
 
@@ -70,6 +82,19 @@ function ProductList() {
   const totalPages = Math.ceil(count / 6);
 
   useEffect(() => {
+      const fetchCategories = async () => {
+        try {
+          const data = await getCategoriesApi();
+          setCategories(data);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+  
+      fetchCategories();
+    }, []);
+
+  useEffect(() => {
     fetchProducts();
   }, [currentPage, ordering,selectedCategory]);
 
@@ -99,11 +124,8 @@ function ProductList() {
             </p>
 
             <div className="mt-7 flex gap-4">
-              <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700">
+              <button onClick={scrollToProducts} className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700">
                 Shop Now →
-              </button>
-              <button className="bg-white border border-slate-200 px-6 py-3 rounded-lg font-semibold shadow-sm">
-                View Deals
               </button>
             </div>
           </div>
@@ -116,23 +138,17 @@ function ProductList() {
           </div>
         </section>
 
+
+  
+
         {/* Category Icons */}
         <section className="grid grid-cols-4 md:grid-cols-8 gap-5 py-8 text-center">
-          {[
-            ["💻", "Electronics"],
-            ["🏠", "Home"],
-            ["👕", "Fashion"],
-            ["🧴", "Beauty"],
-            ["⚽", "Sports"],
-            ["📘", "Books"],
-            ["🧸", "Toys"],
-            ["🔘", "More"],
-          ].map(([icon, label]) => (
-            <div key={label} className="flex flex-col items-center gap-2">
+          {categories.map((category) => (
+            <div key={category.id} className="flex flex-col items-center gap-2">
               <div className="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl">
-                {icon}
+                {/* {icon} */}
               </div>
-              <p className="text-xs font-medium">{label}</p>
+              <p className="text-xs font-medium">{category.name}</p>
             </div>
           ))}
         </section>
@@ -188,7 +204,7 @@ function ProductList() {
         </section>
 
         {/* Products Header */}
-        <div className="flex items-center justify-between mb-5">
+        <div ref={productRef} className="flex items-center justify-between mb-5">
           <div>
             <h2 className="text-2xl font-bold">Featured Products</h2>
             <p className="text-sm text-slate-500 mt-1">
