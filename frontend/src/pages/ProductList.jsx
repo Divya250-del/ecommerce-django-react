@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import { getProductsApi } from "../api/productApi";
+import { useSearchParams } from "react-router-dom";
+
 
 function ProductList() {
   const [products, setProducts] = useState([]);
@@ -17,6 +19,9 @@ function ProductList() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
+  const [searchParams] = useSearchParams();
+  const selectedCategory = searchParams.get("category");
+
   const BASEURL = import.meta.env.VITE_DJANGO_BASE_URL;
 
   
@@ -32,6 +37,7 @@ function ProductList() {
       ordering,
       min_price: minPrice,
       max_price: maxPrice,
+      category: selectedCategory,
     });
 
     setProducts(data.results || []);
@@ -65,7 +71,11 @@ function ProductList() {
 
   useEffect(() => {
     fetchProducts();
-  }, [currentPage, ordering]);
+  }, [currentPage, ordering,selectedCategory]);
+
+  useEffect(() => {
+  setCurrentPage(1);
+}, [selectedCategory]);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -127,23 +137,6 @@ function ProductList() {
           ))}
         </section>
 
-        {/* Service Bar */}
-        <section className="bg-white rounded-xl shadow-sm border border-slate-100 grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-100 mb-8">
-          {[
-            ["🚚", "Free Shipping", "On orders over $50"],
-            ["🔄", "Easy Returns", "30-day return policy"],
-            ["💳", "Secure Payment", "100% secure payment"],
-            ["🎧", "24/7 Support", "Dedicated support"],
-          ].map(([icon, title, desc]) => (
-            <div key={title} className="flex items-center gap-4 p-5">
-              <span className="text-blue-600 text-xl">{icon}</span>
-              <div>
-                <h4 className="font-bold text-sm">{title}</h4>
-                <p className="text-xs text-slate-500">{desc}</p>
-              </div>
-            </div>
-          ))}
-        </section>
 
         {/* Filter Bar */}
         <section className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 mb-6">

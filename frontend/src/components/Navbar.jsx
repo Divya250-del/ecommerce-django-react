@@ -2,11 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { logoutApi } from "../api/authApi";
 import { useAuth } from "../context/AuthContext";
-
+import { getCategoriesApi } from "../api/categoryApi";
+import { useEffect, useState } from "react";
 
 
 function Navbar() {
   const { cartItems } = useCart();
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
 
@@ -16,6 +18,20 @@ function Navbar() {
   );
   const isLoggedIn = !!user;
   const role = user?.role;
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategoriesApi();
+        setCategories(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+    
 
   
 
@@ -46,14 +62,18 @@ function Navbar() {
         </Link>
 
         {/* Category */}
-        <select className="hidden md:block border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 text-sm outline-none">
-          <option>All Categories</option>
-          <option>Electronics</option>
-          <option>Beauty</option>
-          <option>Sports</option>
-          <option>Home</option>
-        </select>
+        <select
+          onChange={(e) =>  navigate(e.target.value ? `/?category=${e.target.value}` : "/")}
+          className="hidden md:block border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 text-sm outline-none"
+        >
+          <option value="">All Categories</option>
 
+          {categories.map((category) => (
+            <option key={category.id} value={category.slug}>
+              {category.name}
+            </option>
+          ))}
+        </select>
         {/* Search */}
         <div className="hidden md:flex flex-1">
           <input

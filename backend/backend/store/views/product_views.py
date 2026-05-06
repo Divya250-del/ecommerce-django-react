@@ -6,6 +6,9 @@ from rest_framework.pagination import PageNumberPagination
 from store.models import Product, Category
 from store.serializers import ProductSerializer, CategorySerializer
 from store.filters import ProductFilter
+from store.permissions import IsCustomerUser
+from rest_framework.permissions import IsAuthenticated
+
 
 
 class ProductPagination(PageNumberPagination):
@@ -15,6 +18,7 @@ class ProductPagination(PageNumberPagination):
 
 
 class ProductListView(ListAPIView):
+    permission_classes = [IsAuthenticated, IsCustomerUser]
     serializer_class = ProductSerializer
     pagination_class = ProductPagination
 
