@@ -11,7 +11,6 @@ export const createOrderApi = async (form) => {
 };
 
 // Logged in User Orders
-// 🧾 CREATE ORDER
 export const getMyOrdersApi = async () => {
   try {
     const response = await apiClient.get("/api/orders/");
@@ -19,4 +18,13 @@ export const getMyOrdersApi = async () => {
   } catch (error) {
     throw error.response?.data || { error: "Failed to fetch order" };
   }
+};
+
+
+export const getSellerOrdersApi = async () => {
+  const response = await apiClient.get(
+    "/api/seller/orders/"
+  );
+
+  return response.data;
 };

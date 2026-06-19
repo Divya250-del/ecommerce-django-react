@@ -11,7 +11,9 @@ import Signup from "./pages/Signup";
 import SignupRole from "./pages/SignupRole";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import OrderPage from "./pages/OrderPage";
-
+import SellerProducts from "./pages/SellerProducts.jsx";
+import AddProduct from "./pages/AddProducts.jsx";
+import EditProduct from "./pages/EditProduct.jsx";
 function App(){
 return(
  <Router>
@@ -36,6 +38,12 @@ return(
     <Route  element={<AdminRouter/>}>
       <Route path="/admin/analytics" element={<AnalyticsDashboard />} />          
     </Route>
+
+    {/* Seller Routes */}
+
+    <Route path="/my-products" element={<SellerProducts />} />
+    <Route path="/seller/products/create" element={<AddProduct />} />
+    <Route path="/products/:id/edit" element={<EditProduct />} />
 
 
         

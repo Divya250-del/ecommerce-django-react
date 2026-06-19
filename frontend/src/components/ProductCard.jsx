@@ -1,6 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
-function ProductCard({ product }) {
+
+
+function ProductCard({ product, showSellerActions = false, onDelete, }) {
+  
+  const navigate = useNavigate();
   return (
     <div className="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
       <div className="relative overflow-hidden">
@@ -10,9 +14,7 @@ function ProductCard({ product }) {
           className="w-full h-56 object-contain p-4 group-hover:scale-105 transition-transform duration-300"
         />
 
-        <button className="absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:bg-gray-100">
-          ♡
-        </button>
+   
       </div>
 
       <div className="p-4">
@@ -30,16 +32,29 @@ function ProductCard({ product }) {
           ${product.price}
         </p>
 
-        <div className="mt-4 flex gap-2">
-          <Link to={`/product/${product.id}`} className="flex-1">
-            <button className="w-full border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-100">
-              View
+        <div className="mt-4">
+          {showSellerActions ? (
+            <div className="flex gap-2">
+              <button
+                onClick={() => navigate(`/products/${product.id}/edit`)}
+                className="flex-1 bg-yellow-500 text-white py-2.5 rounded-xl"
+              >
+                Edit
+              </button>
+            <button
+              onClick={() => onDelete(product.id)}
+              className="flex-1 bg-red-500 text-white py-2.5 rounded-xl"
+            >
+              Delete
             </button>
-          </Link>
-
-          <button className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-            Add
-          </button>
+            </div>
+          ) : (
+            <Link to={`/product/${product.id}`} className="block w-full mt-3">
+              <button className="w-full bg-blue-600 text-white py-2.5 rounded-xl hover:bg-blue-700 transition-all duration-200 font-medium shadow-sm">
+                Add to Cart
+              </button>
+            </Link>
+          )}
         </div>
       </div>
     </div>

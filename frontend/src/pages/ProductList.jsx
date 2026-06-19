@@ -26,13 +26,13 @@ function ProductList() {
   const selectedCategory = searchParams.get("category");
 
   const BASEURL = import.meta.env.VITE_DJANGO_BASE_URL;
-    const productRef = useRef(null);
+  const productRef = useRef(null);
 
-const scrollToProducts = () => {
-  productRef.current?.scrollIntoView({
-    behavior: "smooth",
-  });
-};
+  const scrollToProducts = () => {
+    productRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
 
 
 
@@ -141,17 +141,7 @@ const scrollToProducts = () => {
 
   
 
-        {/* Category Icons */}
-        <section className="grid grid-cols-4 md:grid-cols-8 gap-5 py-8 text-center">
-          {categories.map((category) => (
-            <div key={category.id} className="flex flex-col items-center gap-2">
-              <div className="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center text-2xl">
-                {/* {icon} */}
-              </div>
-              <p className="text-xs font-medium">{category.name}</p>
-            </div>
-          ))}
-        </section>
+
 
 
         {/* Filter Bar */}
@@ -229,7 +219,7 @@ const scrollToProducts = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.length > 0 ? (
               products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} showSellerActions={false} />
               ))
             ) : (
               <p className="col-span-full text-center text-slate-500 py-10">

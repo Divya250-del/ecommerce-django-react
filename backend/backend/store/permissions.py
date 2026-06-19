@@ -12,6 +12,7 @@ class IsSellerUser(BasePermission):
             return request.user.userprofile.role == "seller"
         except UserProfile.DoesNotExist:
             return False
+        
 
 class IsCustomerUser(BasePermission):
     message = "Only customers can perform this action."
@@ -24,4 +25,11 @@ class IsCustomerUser(BasePermission):
             return request.user.userprofile.role == "customer"
         except UserProfile.DoesNotExist:
             return False
+        
+class IsProductOwner(BasePermission):
+    message = "Only Product Owner can perform this action."
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.seller
+
 

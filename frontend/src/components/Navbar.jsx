@@ -53,38 +53,33 @@ function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
-      <div className="max-w-7xl mx-auto px-5 py-4 flex items-center gap-6">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 text-2xl font-bold">
-          <span className="text-3xl">🛒</span>
-          <span className="text-blue-600">Divya</span>
-          <span className="text-slate-900">Cart</span>
-        </Link>
+      <div className="max-w-7xl mx-auto px-5 py-4 flex justify-between items-center">
 
-        {/* Category */}
-        <select
-          onChange={(e) =>  navigate(e.target.value ? `/?category=${e.target.value}` : "/")}
-          className="hidden md:block border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 text-sm outline-none"
-        >
-          <option value="">All Categories</option>
+  {/* Left Side */}
+  <div className="flex items-center gap-8">
+    {/* Logo */}
+    <Link to="/" className="flex items-center gap-2 text-2xl font-bold">
+      <span className="text-3xl">🛒</span>
+      <span className="text-blue-600">Divya</span>
+      <span className="text-slate-900">Cart</span>
+    </Link>
 
-          {categories.map((category) => (
-            <option key={category.id} value={category.slug}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-        {/* Search */}
-        <div className="hidden md:flex flex-1">
-          <input
-            type="text"
-            placeholder="Search for products..."
-            className="w-full border border-slate-200 rounded-l-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-200"
-          />
-          <button className="bg-blue-600 text-white px-7 rounded-r-xl font-semibold hover:bg-blue-700">
-            Search
-          </button>
-        </div>
+    {/* Category */}
+    <select
+      onChange={(e) =>
+        navigate(e.target.value ? `/?category=${e.target.value}` : "/")
+      }
+      className="hidden md:block border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 text-sm outline-none"
+    >
+      <option value="">All Categories</option>
+
+      {categories.map((category) => (
+        <option key={category.id} value={category.slug}>
+          {category.name}
+        </option>
+      ))}
+    </select>
+  </div>
 
         {/* Right Menu */}
         <div className="flex items-center gap-5 text-sm font-semibold">
@@ -108,11 +103,14 @@ function Navbar() {
                 </Link>
               )}
 
-              {role === "customer" && (
+           
+            {(role === "customer" || role === "seller") && (
+              <Link to="/my-orders" className="hover:text-blue-600">
+                📦 My Orders
+              </Link>
+            )}
+               {role === "customer" && (
                 <>
-                  <Link to="/my-orders" className="hover:text-blue-600">
-                    📦 My Orders
-                  </Link>
 
                   <Link to="/cart" className="relative hover:text-blue-600">
                     🛒 Cart
@@ -146,21 +144,13 @@ function Navbar() {
           Home
         </Link>
 
-        <Link to="/" className="hover:text-blue-600">
-          Products
-        </Link>
+        {user?.role === "seller" && (
+          <Link to="/my-products">My Products</Link>
+        
+        )}
 
-        <Link to="/" className="hover:text-blue-600">
-          Deals
-        </Link>
 
-        <Link to="/" className="hover:text-blue-600">
-          About Us
-        </Link>
-
-        <Link to="/" className="hover:text-blue-600">
-          Contact Us
-        </Link>
+       
       </div>
     </header>
   );

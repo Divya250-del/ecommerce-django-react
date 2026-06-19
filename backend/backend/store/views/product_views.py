@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView,CreateAPIView,RetrieveUpdateDestroyAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
@@ -6,8 +6,9 @@ from rest_framework.pagination import PageNumberPagination
 from store.models import Product, Category
 from store.serializers import ProductSerializer, CategorySerializer
 from store.filters import ProductFilter
-from store.permissions import IsCustomerUser
+from store.permissions import IsCustomerUser,IsSellerUser, IsProductOwner
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 
@@ -18,7 +19,7 @@ class ProductPagination(PageNumberPagination):
 
 
 class ProductListView(ListAPIView):
-    permission_classes = [IsAuthenticated, IsCustomerUser]
+    permission_classes = [IsAuthenticated, IsCustomerUser | IsSellerUser]
     serializer_class = ProductSerializer
     pagination_class = ProductPagination
 
@@ -54,6 +55,37 @@ class ProductDetailView(RetrieveAPIView):
     serializer_class = ProductSerializer
     lookup_field = "id"
     lookup_url_kwarg = "pk"
+
+
+class ProductCreateView(CreateAPIView):
+    permission_classes = [IsAuthenticated, IsSellerUser, ]
+    parser_classes = [MultiPartParser, FormParser]
+    serializer_class = ProductSerializer
+
+
+    def create(self, request, *args, **kwargs):
+        print("REQUEST DATA:", request.data)
+        return super().create(request, *args, **kwargs)
+
+
+    def perform_create(self, serializer):
+        serializer.save(seller=self.request.user)
+
+class ProductUpdateDeleteView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated, IsSellerUser, IsProductOwner]
+    queryset = Product.objects.select_related("category").all()
+    serializer_class = ProductSerializer
+    lookup_field = "id"
+    lookup_url_kwarg = "pk"
+
+class SellerProductListView(ListAPIView):
+    permission_classes = [IsAuthenticated, IsSellerUser]
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        return Product.objects.filter(seller=self.request.user)
+
+
 
 
 class CategoryListView(APIView):
