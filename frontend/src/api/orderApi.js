@@ -28,3 +28,11 @@ export const getSellerOrdersApi = async () => {
 
   return response.data;
 };
+
+export const razorpayVerificationApi = async (form) => {
+  const response = await apiClient.post(
+    "/api/payment/verify/",form
+  );
+
+  return response.data;
+};

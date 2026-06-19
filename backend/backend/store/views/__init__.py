@@ -7,3 +7,4 @@ from .auth_views import (
     LogoutView,
     MeView,
 )
+from .verifyrazor_views import VerifyPaymentView

@@ -19,6 +19,7 @@ from store.views import (
     LogoutView,
     MeView,
     SellerOrdersView,
+    VerifyPaymentView,
    
 )
 
@@ -54,4 +55,5 @@ urlpatterns = [
     path("orders/", MyOrdersView.as_view(), name="my-orders"),
     path("seller/orders/",SellerOrdersView.as_view(),name="seller-orders"),
     path('orders/create/', CreateOrderView.as_view(), name='create-order'),
+    path('payment/verify/', VerifyPaymentView.as_view(), name='verify-payment'),
 ]
