@@ -35,4 +35,4 @@ jobs:
           echo "🎨 Collecting Django static files..."
           docker compose exec -T backend python manage.py collectstatic --noinput
           
-          echo "✅ Deployment Successful!"
+          echo "✅ Deployment Successfull!"
