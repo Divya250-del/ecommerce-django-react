@@ -4,7 +4,7 @@ import apiClient from "./apiClient";
 
 export const createProductApi = async (formData) => {
   try{
-  const response = await apiClient.post("api/products/create/", formData, {
+  const response = await apiClient.post("/api/products/create/", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
