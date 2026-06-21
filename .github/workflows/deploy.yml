@@ -20,6 +20,7 @@ jobs:
         host: ${{ secrets.AWS_HOST }}
         username: ${{ secrets.AWS_USER }}
         key: ${{ secrets.AWS_SSH_KEY }}
+        port: 22
         script: |
           cd /home/ubuntu/ecommerce-django-react
           
