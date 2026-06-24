@@ -34,3 +34,8 @@ Thumbs.db
 .vscode/
 .idea/
 backend/notes.txt
+
+# ======================
+# Environment Secrets (DO NOT COMMIT)
+# ======================
+.env

@@ -4,36 +4,70 @@ services:
   # 1. PostgreSQL Database Service
   db:
     image: postgres:15-alpine
+    env_file:
+      - .env
     environment:
-      POSTGRES_DB: ecommerce_db
-      POSTGRES_USER: shop_admin
-      POSTGRES_PASSWORD: super_secure_password_123
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}    
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
-  # 2. Django Backend Service
+  # 2. RabbitMQ Message Broker (ADDED)
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: ecommerce_rabbitmq
+    ports:
+      - "5672:5672"   # Core application communication port
+      - "15672:15672" # Management Web Dashboard port
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 3. Django Backend Service (UPDATED)
   backend:
-    build: ./backend/backend # Points to the first backend folder containing its Dockerfile
+    build: ./backend/backend 
+    command: sh -c "python manage.py migrate && gunicorn backend.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - ./backend/backend:/app
       - django_media:/app/media
     ports:
       - "8000:8000"
-    environment:
-      - DB_HOST=db
-      - DB_NAME=ecommerce_db
-      - DB_USER=shop_admin
-      - DB_PASSWORD=super_secure_password_123
+    env_file:
+      - .env
     depends_on:
+      db:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy # Ensures RabbitMQ is fully up before Django connects
+
+  # 4. Celery Worker Service (ADDED)
+  celery_worker:
+    build: ./backend/backend # Uses the exact same Dockerfile configuration as your backend
+    command: celery -A backend worker --loglevel=info # 'backend' should match the folder containing celery.py
+    volumes:
+      - ./backend/backend:/app
+      - django_media:/app/media
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+      - backend
       - db
 
-  # 3. React Frontend Service
+  # 5. React Frontend Service
   frontend:
-    build: ./frontend # Points to your frontend folder containing its Dockerfile
+    build: ./frontend
     ports:
       - "80:80"
+    env_file:
+      - ./frontend/.env
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # Forces hot-reloading to work inside Docker containers
     depends_on:
       - backend
 

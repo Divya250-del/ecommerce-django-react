@@ -7,6 +7,7 @@ from store.permissions import IsCustomerUser,IsSellerUser
 from rest_framework.generics import ListAPIView
 from store.serializers import OrderSerializer,OrderItemSerializer
 from store.razorpay_client import client
+from store.tasks import send_order_confirmation_email
 
 
 class CreateOrderView(APIView):
@@ -60,6 +61,12 @@ class CreateOrderView(APIView):
 
             order.razorpay_order_id = razorpay_order["id"]
             order.save()
+
+            order_id = order.id
+            user_email = request.user.email
+            total_amount = order.total_amount 
+            
+            send_order_confirmation_email.delay(user_email, order_id, total_amount)
 
             return Response({
                 "message": "Order Created",
