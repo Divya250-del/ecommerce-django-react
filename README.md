@@ -83,19 +83,19 @@ It simulates a real-world, high-traffic retail backend ecosystem by implementing
 
 ## 🏗️ Architecture
 
-![Architecture](./NexusCart-Architecture.png)
+![Architecture](./nexus_architecture.png)
 
 <hr />
 
 ## 🏗️ CI/CD Pipeline Flow
 
-![CI/CD Flow Diagram](./NexusCart-CiCdFlow.png)
+![CI/CD Flow Diagram](./nexus_cart_ci_cd_pipeline_flow.png)
 
 <hr />
 
 ## 🏗️ Request and Order Processing Flow
 
-![Request Flow Diagram](./NexusCart-RequestFlow.png)
+![Request Flow Diagram](./nexus_cart_order_processing_flow.png)
 
 <hr />
 
@@ -170,38 +170,30 @@ It simulates a real-world, high-traffic retail backend ecosystem by implementing
 ## 🔄 Asynchronous Order Task Flow
 
 ```text
-🛒 Order Submitted (Client → Nginx Proxy → Django REST Framework API)
+🛒 Order Submitted & Handled (Client → Nginx → Django REST Framework API)
         │
         ▼
-📦 Django Application Layer
-- Validates structural input data fields
-- Commits localized order record as (PENDING)
-- Dispatches asynchronous execution payload to broker
+💳 External Gateway Execution (Razorpay)
+- User completes authorization on payment window
+- Razorpay fires a secure webhook callback to Django API
         │
         ▼
-📢 Message Broker (RabbitMQ)
+📦 Django Application Layer (Synchronous Core)
+- Verifies Razorpay signature security token
+- Transitions order state from PENDING ➔ PAID
+- Flushes active temporary basket keys from Redis Cache
+- Splits transactional visibility (Customer View vs. Seller Fulfillment)
         │
-        ├──────────────► ⚙️ Celery Async Worker Queue
-        │                - Picks up background validation context
-        │                - Offloads long-running execution sequences from main loop
+        ▼
+📢 Trigger Async Event (Message Broker: RabbitMQ)
+- Django drops `send_success_email` payload into queue
+- Instantly returns HTTP 200 Success status back to client
         │
-        └──────────────► 💳 Payment Gateway Engine (Razorpay)
-                         - Registers external transaction identifiers
-                         - Safely waits for payment validation callbacks
-
         ▼
-⚙️ Background Workers (Consumer Pipeline)
-- Listens to payment state changes:
-    ✔ `payment_completed` (Webhook verification success)
-    ✔ `payment_declined`  (Transaction termination)
-
-- Executes internal routines:
-    → Transitions state to PAID / FAILED
-    → Flushes temporary caching keys in Redis
-    → Splits visibility profiles across Customer History and Seller Fulfillment Views
-
-        ▼
-📡 Instant Synchronized Output to Client View Layer
+⚙️ Background Worker Queue (Celery Consumer)
+- Picks up execution payload asynchronously
+- Establishes external SMTP handshake 
+- Dispatches "Order Successful" email notification to customer
 ```
 
 ## 🧪 Application API Reference
