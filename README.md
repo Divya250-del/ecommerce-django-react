@@ -17,7 +17,7 @@
 
 <br><br>
 
-🔗 **Public Address:** http://13.207.149.114/
+🔗 **Public Access:** http://13.207.149.114/
 
 </td>
 
@@ -74,16 +74,19 @@ It simulates a real-world, high-traffic retail backend ecosystem by implementing
 ---
 
 ## 🏗️ Architecture
+
 ![Architecture](./NexusCart-Architecture.png)
 
 ---
 
 ## 🏗️ CI/CD Pipeline Flow
+
 ![CI/CD Flow Diagram](./NexusCart-CiCdFlow.png)
 
 ---
 
 ## 🏗️ Request and Order Processing Flow
+
 ![Request Flow Diagram](./NexusCart-RequestFlow.png)
 
 ---
@@ -135,22 +138,27 @@ It simulates a real-world, high-traffic retail backend ecosystem by implementing
 ## 🔑 Core Features
 
 ### 👤 Authentication & Authorization
+
 - Token-based JWT authorization handling
 - Strict Role-Based Access Control (RBAC) across administrative endpoints
 
 ### 🏷️ Inventory & Catalog Management
+
 - Model definitions for complex multi-variant product relations
 - Atomic database constraints enforcing inventory deductions on item selections
 
 ### 🛒 Persistent Shopping Carts
+
 - Redis-backed and database-persisted session states preserving active user baskets
 - Automatic pricing recalculations and cart mutation handling
 
 ### 📦 Decoupled Asynchronous Order System
+
 - Non-blocking order capture mechanisms
 - Event dispatch tasks handled out of line by secondary worker instances
 
 ### 💳 Payment Pipeline & Webhook Safety
+
 - End-to-end checkout synchronization via the Razorpay gateway pipeline
 - Secure custom webhook processing handling server-side transaction verifications
 
