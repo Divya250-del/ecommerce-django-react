@@ -202,6 +202,7 @@ It simulates a real-world, high-traffic retail backend ecosystem by implementing
 
         ▼
 📡 Instant Synchronized Output to Client View Layer
+```
 
 ## 🧪 Application API Reference
 
@@ -285,9 +286,10 @@ ECOMMERCEPROJECTS (GitHub Root)
 ├── .gitignore         (Excludes Sensitive Local Variables)
 ├── docker-compose.yml (Multi-Service Network Container Orchestration)
 └── README.md          (System Documentation Profile)
+
+
 ```
 ---
-
 # 🚀 Run Locally
 
 ## 📥 Clone
