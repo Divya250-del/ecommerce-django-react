@@ -205,6 +205,8 @@ It simulates a real-world, high-traffic retail backend ecosystem by implementing
 
 ## 🧪 Application API Reference
 
+---
+
 All backend communication layers are prefixed uniformly by the primary router configuration gate (`/api/`).
 
 ### 🔐 Session & Registration Services
@@ -254,40 +256,6 @@ All backend communication layers are prefixed uniformly by the primary router co
 | POST   | /api/payment/verify/   | Securely evaluates external transactional flags|
 
 <hr />
-
-
-## 🚀 Run Locally
-
-## 📥 Clone
-
-```bash
-git clone https://gitlab.com/abhay-tech/tastio.git
-cd tastio-workspace
-```
-
----
-
-## 🐳 Infrastructure
-
-```bash
-cd tastio-infra
-docker-compose up -d
-```
-
----
-
-## ⚙️ Backend
-
-Start services in order:
-
-1. Config Server  
-2. Eureka Server  
-3. Microservices  
-4. API Gateway  
-
-```bash
-mvn spring-boot:run
-```
 
 ---
 
