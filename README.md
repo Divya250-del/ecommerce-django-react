@@ -202,3 +202,206 @@ It simulates a real-world, high-traffic retail backend ecosystem by implementing
 
         ▼
 📡 Instant Synchronized Output to Client View Layer
+
+## 🧪 Application API Reference
+
+All backend communication layers are prefixed uniformly by the primary router configuration gate (`/api/`).
+
+### 🔐 Session & Registration Services
+| Method | Endpoint               | Description                                  |
+|--------|------------------------|----------------------------------------------|
+| POST   | /api/register/         | Provisions a new platform user profile       |
+| POST   | /api/login/            | Establishes cookie-validated user sessions   |
+| POST   | /api/logout/           | Flushes active session validation markers    |
+| GET    | /api/me/               | Resolves active authenticated user profiles  |
+
+---
+
+### 🛍️ Product Catalog & Management Services
+| Method | Endpoint               | Description                                  |
+|--------|------------------------|----------------------------------------------|
+| GET    | /api/products/         | Fetches global marketplace feed (all sellers)|
+| GET    | /api/products/{id}/    | Retrieves detailed target product details    |
+| POST   | /api/products/create/  | Allows onboarded sellers to deploy products  |
+| PUT/DEL| /api/products/{id}/manage | Updates or purges active seller listings  |
+| GET    | /api/seller/products/  | Isolates product listings specific to seller |
+
+---
+
+### 📂 Category Infrastructure
+| Method | Endpoint               | Description                                  |
+|--------|------------------------|----------------------------------------------|
+| GET    | /api/categories/       | Reads full set of product search taxonomy    |
+
+---
+
+### 🛒 Active Shopping Cart Services
+| Method | Endpoint               | Description                                  |
+|--------|------------------------|----------------------------------------------|
+| GET    | /api/cart/             | Inspects structural basket states for user   |
+| POST   | /api/cart/add/         | Injects selected line items into cart        |
+| POST   | /api/cart/remove/      | Clears target line items out of active basket|
+| POST   | /api/cart/update/      | Adjusts unit frequencies for specific item   |
+
+---
+
+### 📦 Order Lifecycles & Verification
+| Method | Endpoint               | Description                                  |
+|--------|------------------------|----------------------------------------------|
+| GET    | /api/orders/           | Compiles full customer order history display  |
+| GET    | /api/seller/orders/    | Isolates target incoming purchases for seller|
+| POST   | /api/orders/create/    | Consolidates cart arrays to map target order |
+| POST   | /api/payment/verify/   | Securely evaluates external transactional flags|
+
+<hr />
+
+
+## 🚀 Run Locally
+
+## 📥 Clone
+
+```bash
+git clone https://gitlab.com/abhay-tech/tastio.git
+cd tastio-workspace
+```
+
+---
+
+## 🐳 Infrastructure
+
+```bash
+cd tastio-infra
+docker-compose up -d
+```
+
+---
+
+## ⚙️ Backend
+
+Start services in order:
+
+1. Config Server  
+2. Eureka Server  
+3. Microservices  
+4. API Gateway  
+
+```bash
+mvn spring-boot:run
+```
+
+---
+
+## 💻 Frontend
+|--------|--------------------------|--------------------------|
+| POST   | /api/orders              | Place order              |
+| GET    | /api/orders/{id}         | Get order details        |
+
+---
+
+### 💳 Payment Service
+| Method | Endpoint                     | Description                    |
+|--------|-----------------------------|--------------------------------|
+| POST   | /api/payments               | Initiate payment               |
+| POST   | /api/payments/verify        | Verify Razorpay payment        |
+
+---
+
+## 📦 Project Structure
+```text
+ECOMMERCEPROJECTS (GitHub Root)
+│
+├── .github/workflows/ (GitHub Actions CI/CD Automated Pipelines)
+├── backend/           (Django Application & Celery Core Engine)
+├── frontend/          (React Interface Application)
+├── .env               (Secure Environment Runtime Configurations - Git Ignored)
+├── .gitignore         (Excludes Sensitive Local Variables)
+├── docker-compose.yml (Multi-Service Network Container Orchestration)
+└── README.md          (System Documentation Profile)
+```
+---
+
+# 🚀 Run Locally
+
+## 📥 Clone
+
+```bash
+git clone https://github.com/Divya250-del/ecommerce-django-react.git
+cd ECOMMERCEPROJECTS
+```
+
+---
+
+## 🐳 Infrastructure & Containerized Services
+
+To protect your sensitive credentials, ensure your configuration variables are specified in a centralized .env profile at the root folder level before starting.
+
+```bash
+# Spin up all containerized infrastructure in detached mode
+docker-compose up --build -d
+```
+
+---
+
+## ⚙️ Backend Core Launch
+
+Ensure dependencies are locally restored inside a dedicated virtual environment if executing outside of Docker.
+
+```bash
+cd backend
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+In a separate terminal shell inside the backend directory, initialize your asynchronous processing instances:
+
+```bash
+celery -A backend worker --loglevel=info
+```
+
+---
+
+## 💻 Frontend Interface
+
+```bash
+cd ../frontend
+npm install
+npm run dev
+```
+
+---
+
+## 🌐 Access
+
+- Frontend Interface → `http://localhost:5173`
+- Headless Core API Gateway → `http://localhost:8000`
+- Database Router Admin ➔ `http://localhost:8000/api/admin/`
+
+---
+
+# 👨‍💻 Author
+
+<div align="left">
+
+## Divya Jain
+
+### Backend-Focused Python Engineer 🚀
+
+Building robust, data-intensive backends, high-throughput cloud delivery setups, and custom API pipelines.
+
+<br>
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Divya%20Jain-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/divyajain012/)
+[![GitHub](https://img.shields.io/badge/GitHub-Divya250--del-black?style=for-the-badge&logo=github)](https://github.com/Divya250-del)
+[![Email](https://img.shields.io/badge/Email-Contact-red?style=for-the-badge&logo=gmail)](mailto:divyajain112002@gmail.com)
+
+</div>
+
+---
+
+<div align="left">
+
+### 💡 Focus Areas
+
+Python • Django • Django REST Framework • System Architecture • Celery • RabbitMQ • Redis • Docker • CI/CD Automation
+</div>
