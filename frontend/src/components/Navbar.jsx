@@ -51,109 +51,162 @@ function Navbar() {
     }
   };
 
-  return (
-    <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
-      <div className="max-w-7xl mx-auto px-5 py-4 flex justify-between items-center">
+ return (
+  <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
 
-  {/* Left Side */}
-  <div className="flex items-center gap-8">
-    {/* Logo */}
-    <Link to="/" className="flex items-center gap-2 text-2xl font-bold">
-      <span className="text-3xl">🛒</span>
-      <span className="text-blue-600">Divya</span>
-      <span className="text-slate-900">Cart</span>
-    </Link>
+    {/* Top Navbar */}
+    <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-    {/* Category */}
-    <select
-      onChange={(e) =>
-        navigate(e.target.value ? `/?category=${e.target.value}` : "/")
-      }
-      className="hidden md:block border border-slate-200 rounded-xl px-4 py-3 bg-slate-50 text-sm outline-none"
-    >
-      <option value="">All Categories</option>
+      {/* Left */}
+      <div className="flex items-center gap-8">
 
-      {categories.map((category) => (
-        <option key={category.id} value={category.slug}>
-          {category.name}
-        </option>
-      ))}
-    </select>
-  </div>
+        {/* Logo */}
+        <Link
+          to="/"
+          className="flex items-center gap-3 group"
+        >
+          <div className="text-4xl group-hover:scale-110 transition duration-300">
+            🛒
+          </div>
 
-        {/* Right Menu */}
-        <div className="flex items-center gap-5 text-sm font-semibold">
-          {!isLoggedIn ? (
-            <>
-              <Link to="/login" className="hover:text-blue-600">
-                👤 Login
+          <div>
+            <h2 className="text-3xl font-extrabold tracking-tight">
+              <span className="text-slate-900">Shop</span>
+              <span className="text-blue-600">io</span>
+            </h2>
+
+            <p className="text-xs text-slate-500 -mt-1">
+              Smart Shopping Platform
+            </p>
+          </div>
+        </Link>
+
+        {/* Categories */}
+
+        <select
+          onChange={(e) =>
+            navigate(
+              e.target.value
+                ? `/?category=${e.target.value}`
+                : "/"
+            )
+          }
+          className="hidden lg:block bg-slate-50 border border-slate-200 rounded-xl px-5 py-3 text-sm font-medium outline-none hover:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+        >
+          <option value="">All Categories</option>
+
+          {categories.map((category) => (
+            <option
+              key={category.id}
+              value={category.slug}
+            >
+              {category.name}
+            </option>
+          ))}
+        </select>
+
+      </div>
+
+      {/* Right */}
+
+      <div className="flex items-center gap-3 text-sm font-semibold">
+
+        {!isLoggedIn ? (
+          <>
+            <Link
+              to="/login"
+              className="px-4 py-2 rounded-lg hover:bg-slate-100 transition"
+            >
+              👤 Login
+            </Link>
+
+            <Link
+              to="/signup-role"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl shadow-md transition"
+            >
+              Sign Up
+            </Link>
+          </>
+        ) : (
+          <>
+
+            {role === "admin" && (
+              <Link
+                to="/admin/analytics"
+                className="text-purple-600 hover:text-purple-800"
+              >
+                📊 Analytics
               </Link>
-              <Link to="/signup-role" className="hover:text-blue-600">
-                Sign Up
-              </Link>
-            </>
-          ) : (
-            <>
-              {role === "admin" && (
-                <Link
-                  to="/admin/analytics"
-                  className="text-purple-600 hover:text-purple-800"
-                >
-                  📊 Analytics
-                </Link>
-              )}
+            )}
 
-           
             {(role === "customer" || role === "seller") && (
-              <Link to="/my-orders" className="hover:text-blue-600">
+              <Link
+                to="/my-orders"
+                className="hover:text-blue-600 transition"
+              >
                 📦 My Orders
               </Link>
             )}
-               {role === "customer" && (
-                <>
 
-                  <Link to="/cart" className="relative hover:text-blue-600">
-                    🛒 Cart
-                    {cartCount > 0 && (
-                      <span className="absolute -top-3 -right-4 bg-blue-600 text-white text-xs rounded-full px-1.5">
-                        {cartCount}
-                      </span>
-                    )}
-                  </Link>
-                </>
-              )}
-              <button
-                onClick={handleLogout}
-                className="hover:text-red-600 font-semibold"
+            {role === "customer" && (
+              <Link
+                to="/cart"
+                className="relative hover:text-blue-600 transition"
               >
-                Logout
-              </button>
-              
-            </>
-          )}
-        </div>
+                🛒 Cart
+
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-4 bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5 py-0.5 shadow">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+            )}
+
+            <button
+              onClick={handleLogout}
+              className="bg-red-50 text-red-600 hover:bg-red-100 px-4 py-2 rounded-lg transition"
+            >
+              Logout
+            </button>
+
+          </>
+        )}
+
       </div>
 
-      {/* Second Nav Row */}
-      <div className="max-w-7xl mx-auto px-5 py-3 hidden md:flex items-center gap-10 text-sm font-medium">
-        <button className="bg-blue-600 text-white px-5 py-2 rounded-lg">
+    </div>
+
+    {/* Bottom Navbar */}
+
+    <div className="border-t border-slate-100 bg-white">
+      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-10">
+
+        <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold shadow-md transition">
           ☰ Shop by Category
         </button>
 
-        <Link to="/" className="text-blue-600 border-b-2 border-blue-600 pb-2">
+        <Link
+          to="/"
+          className="text-blue-600 font-semibold border-b-[3px] border-blue-600 pb-2"
+        >
           Home
         </Link>
 
-        {user?.role === "seller" && (
-          <Link to="/my-products">My Products</Link>
-        
+        {role === "seller" && (
+          <Link
+            to="/my-products"
+            className="hover:text-blue-600 transition"
+          >
+            📦 My Products
+          </Link>
         )}
 
-
-       
       </div>
-    </header>
-  );
+    </div>
+
+  </header>
+);
 }
 
 export default Navbar;

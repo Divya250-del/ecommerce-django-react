@@ -3,6 +3,8 @@ import ProductCard from "../components/ProductCard";
 import { getProductsApi } from "../api/productApi";
 import { getCategoriesApi } from "../api/categoryApi";
 import { useSearchParams } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
 
 
 function ProductList() {
@@ -27,6 +29,9 @@ function ProductList() {
 
   const BASEURL = import.meta.env.VITE_DJANGO_BASE_URL;
   const productRef = useRef(null);
+
+    const { user, setUser } = useAuth();
+    const isLoggedIn = !!user;
 
   const scrollToProducts = () => {
     productRef.current?.scrollIntoView({
@@ -108,35 +113,77 @@ function ProductList() {
 
 
       <main className="max-w-7xl mx-auto px-5 py-6">
-        {/* Hero Section */}
-        <section className="bg-blue-50 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between overflow-hidden">
-          <div className="max-w-xl">
-            <p className="text-blue-600 font-bold text-sm mb-4">
-              BEST QUALITY PRODUCTS
-            </p>
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
-              Find Everything <br />
-              You <span className="text-blue-600">Need</span>
-            </h1>
-            <p className="mt-5 text-slate-600">
-              Discover amazing products at the best prices. Quality you can
-              trust, service you can count on.
-            </p>
+{/* Hero Section */}
+<section className="bg-gradient-to-r from-slate-50 to-blue-50 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between overflow-hidden">
 
-            <div className="mt-7 flex gap-4">
-              <button onClick={scrollToProducts} className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700">
-                Shop Now →
-              </button>
-            </div>
-          </div>
+  {/* Left Content */}
+  <div className="max-w-xl">
+    <p className="inline-block bg-blue-100 text-blue-700 font-semibold px-4 py-2 rounded-full text-sm">
+      🚀 Modern E-Commerce Platform
+    </p>
 
-          <div className="mt-8 md:mt-0 text-center">
-            <div className="text-8xl md:text-9xl">🛒</div>
-            <div className="bg-blue-600 text-white rounded-full w-28 h-28 flex items-center justify-center font-bold text-xl mx-auto -mt-8">
-              50% <br /> OFF
-            </div>
-          </div>
-        </section>
+    <h1 className="mt-6 text-4xl md:text-5xl font-extrabold leading-tight text-slate-900">
+      Shop Everything <br />
+      <span className="text-blue-600">You Need</span>
+    </h1>
+
+    <p className="mt-5 text-slate-600 text-lg leading-relaxed">
+      Discover premium products with a fast, secure, and seamless shopping
+      experience. Browse categories, manage your cart, and checkout with
+      confidence.
+    </p>
+
+    <div className="mt-8 flex gap-4">
+      <button
+        onClick={scrollToProducts}
+        className="bg-blue-600 text-white px-7 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+      >
+        Shop Now →
+      </button>
+    </div>
+  </div>
+
+  {/* Right Side */}
+  <div className="mt-10 md:mt-0 flex flex-col items-center">
+
+    <div className="text-[140px] md:text-[170px] drop-shadow-lg animate-bounce">
+      🛍️
+    </div>
+<div className="grid grid-cols-2 gap-3 mt-3">
+
+  <div className="bg-white rounded-xl px-5 py-3 shadow-md text-center">
+    <p className="text-2xl">🔒</p>
+    <p className="text-sm font-semibold text-slate-700">
+      Secure Payment
+    </p>
+  </div>
+
+  <div className="bg-white rounded-xl px-5 py-3 shadow-md text-center">
+    <p className="text-2xl">🛍️</p>
+    <p className="text-sm font-semibold text-slate-700">
+      Multi-Category
+    </p>
+  </div>
+
+  <div className="bg-white rounded-xl px-5 py-3 shadow-md text-center">
+    <p className="text-2xl">👤</p>
+    <p className="text-sm font-semibold text-slate-700">
+      Customer & Seller
+    </p>
+  </div>
+
+  <div className="bg-white rounded-xl px-5 py-3 shadow-md text-center">
+    <p className="text-2xl">🛒</p>
+    <p className="text-sm font-semibold text-slate-700">
+      Smart Cart
+    </p>
+  </div>
+
+</div>
+   
+  </div>
+
+</section>
 
 
   
@@ -144,9 +191,11 @@ function ProductList() {
 
 
 
-        {/* Filter Bar */}
-        <section className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+        {isLoggedIn && (
+  <>
+    {/* Filter Bar */}
+    <section className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
             <input
               type="text"
               placeholder="Search products..."
@@ -191,68 +240,85 @@ function ProductList() {
           >
             Apply Filters
           </button>
-        </section>
+    </section>
 
-        {/* Products Header */}
-        <div ref={productRef} className="flex items-center justify-between mb-5">
-          <div>
-            <h2 className="text-2xl font-bold">Featured Products</h2>
-            <p className="text-sm text-slate-500 mt-1">
-              Showing {products.length} of {count} products
-            </p>
-          </div>
-          <button className="text-blue-600 text-sm font-semibold">View All →</button>
-        </div>
+    {/* Products Header */}
+    <div
+      ref={productRef}
+      className="flex items-center justify-between mb-5"
+    >
+      <div>
+        <h2 className="text-2xl font-bold">Featured Products</h2>
+        <p className="text-sm text-slate-500 mt-1">
+          Showing {products.length} of {count} products
+        </p>
+      </div>
 
-        {/* Loading */}
-        {loading && (
-          <div className="text-center py-16 text-slate-500">Loading products...</div>
+      <button className="text-blue-600 text-sm font-semibold">
+        View All →
+      </button>
+    </div>
+
+    {/* Loading */}
+    {loading && (
+      <div className="text-center py-16 text-slate-500">
+        Loading products...
+      </div>
+    )}
+
+    {/* Error */}
+    {error && (
+      <div className="text-center text-red-500 py-16">
+        {error}
+      </div>
+    )}
+
+    {/* Products */}
+    {!loading && !error && (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.length > 0 ? (
+          products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              showSellerActions={false}
+            />
+          ))
+        ) : (
+          <p className="col-span-full text-center text-slate-500 py-10">
+            No Products Available...
+          </p>
         )}
+      </div>
+    )}
 
-        {/* Error */}
-        {error && (
-          <div className="text-center text-red-500 py-16">{error}</div>
-        )}
+    {/* Pagination */}
+    {!loading && count > 0 && (
+      <div className="flex justify-center items-center gap-5 py-10">
+        <button
+          onClick={handlePrev}
+          disabled={!prevUrl}
+          className="px-5 py-2 rounded-lg bg-white border border-slate-200 disabled:opacity-50 hover:bg-slate-100"
+        >
+          ← Previous
+        </button>
 
-        {/* Products Grid */}
-        {!loading && !error && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.length > 0 ? (
-              products.map((product) => (
-                <ProductCard key={product.id} product={product} showSellerActions={false} />
-              ))
-            ) : (
-              <p className="col-span-full text-center text-slate-500 py-10">
-                No Products Available...
-              </p>
-            )}
-          </div>
-        )}
+        <span className="text-slate-600 font-medium">
+          Page {currentPage} of {totalPages || 1}
+        </span>
 
-        {/* Pagination */}
-        {!loading && count > 0 && (
-          <div className="flex justify-center items-center gap-5 py-10">
-            <button
-              onClick={handlePrev}
-              disabled={!prevUrl}
-              className="px-5 py-2 rounded-lg bg-white border border-slate-200 disabled:opacity-50 hover:bg-slate-100"
-            >
-              ← Previous
-            </button>
+        <button
+          onClick={handleNext}
+          disabled={!nextUrl}
+          className="px-5 py-2 rounded-lg bg-blue-600 text-white disabled:opacity-50 hover:bg-blue-700"
+        >
+          Next →
+        </button>
+      </div>
+    )}
 
-            <span className="text-slate-600 font-medium">
-              Page {currentPage} of {totalPages || 1}
-            </span>
-
-            <button
-              onClick={handleNext}
-              disabled={!nextUrl}
-              className="px-5 py-2 rounded-lg bg-blue-600 text-white disabled:opacity-50 hover:bg-blue-700"
-            >
-              Next →
-            </button>
-          </div>
-        )}
+  </>
+)}
       </main>
     </div>
   );

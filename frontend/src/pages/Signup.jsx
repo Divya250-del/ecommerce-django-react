@@ -77,7 +77,7 @@ function Signup() {
           </h2>
 
           <p className="text-sm text-slate-500 mt-2">
-            Join Divya Cart and start shopping today
+            Join Shopio and start shopping today
           </p>
         </div>
 

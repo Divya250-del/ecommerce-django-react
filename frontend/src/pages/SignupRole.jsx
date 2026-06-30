@@ -8,7 +8,7 @@ function SignupRole() {
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md text-center">
 
         <h2 className="text-2xl font-bold mb-6">
-          Join Divya Cart
+          Join Shopio
         </h2>
 
         <p className="text-gray-500 mb-6">

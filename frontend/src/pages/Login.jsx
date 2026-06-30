@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginApi } from "../api/cartApi";
+import { getMeApi } from "../api/authApi";
+import { useAuth } from "../context/AuthContext";
+
 
 
 function Login() {
@@ -9,6 +12,8 @@ function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
+  const { user, setUser } = useAuth();
+
 
   const navigate = useNavigate();
 
@@ -25,6 +30,10 @@ function Login() {
       
       const data = await loginApi(form);
       console.log(data);
+      const user_data = await getMeApi();
+      setUser(user_data);
+      console.log(user_data);
+
       setMsg("Login successful! Redirecting...");
 
 
@@ -53,7 +62,7 @@ function Login() {
           </h2>
 
           <p className="text-sm text-slate-500 mt-2">
-            Login to continue shopping with Divya Cart
+            Login to continue shopping with Shopio
           </p>
         </div>
 

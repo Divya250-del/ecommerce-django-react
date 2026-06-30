@@ -1,4 +1,4 @@
-# 🚀 NexusCart – Asynchronous E-Commerce & Task Processing Platform
+# 🚀 Shopio – Asynchronous E-Commerce & Task Processing Platform
 
 # 🌐 Live Deployment
 
@@ -36,7 +36,7 @@
 
 ## 🧠 Overview
 
-**NexusCart** is a `production-grade E-Commerce & Asynchronous Task Platform` built using `Python 3.11+`, `Django`, `Django REST Framework (DRF)`, and a scalable asynchronous task orchestration layout. 
+**Shopio** is a `production-grade E-Commerce & Asynchronous Task Platform` built using `Python 3.11+`, `Django`, `Django REST Framework (DRF)`, and a scalable asynchronous task orchestration layout. 
 
 The platform features a specialized **Dual-Portal Architecture** segregating workflows for **Sellers** and **Customers** under a unified headless backend. Independent merchants can securely onboard to manage isolated product storefronts and fulfill multi-customer orders, while buyers interact with a consolidated multi-vendor marketplace catalog.
 
@@ -83,19 +83,19 @@ It simulates a real-world, high-traffic retail backend ecosystem by implementing
 
 ## 🏗️ Architecture
 
-![Architecture](./nexus_architecture.png)
+![Architecture](./shopio_architecture.png)
 
 <hr />
 
 ## 🏗️ CI/CD Pipeline Flow
 
-![CI/CD Flow Diagram](./nexus_cart_ci_cd_pipeline_flow.png)
+![CI/CD Flow Diagram](./shopio_ci_cd_pipeline_flow.png)
 
 <hr />
 
 ## 🏗️ Request and Order Processing Flow
 
-![Request Flow Diagram](./nexus_cart_order_processing_flow.png)
+![Request Flow Diagram](./shopio_cart_order_processing_flow.png)
 
 <hr />
 
@@ -365,5 +365,5 @@ Building robust, data-intensive backends, high-throughput cloud delivery setups,
 
 ### 💡 Focus Areas
 
-Python • Django • Django REST Framework • System Architecture • Celery • RabbitMQ • Redis • Docker • CI/CD Automation
+`Python` • `Django` • `Django REST Framework` • `System Architecture` • `Celery` • `RabbitMQ` • `Redis` • `Docker` • `CI/CD Automation`
 </div>
