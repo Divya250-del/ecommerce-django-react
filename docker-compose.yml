@@ -64,6 +64,8 @@ services:
     build: ./frontend
     ports:
       - "80:80"
+    volumes:
+      - django_media:/app/media:ro
     environment:
       - CHOKIDAR_USEPOLLING=true  # Forces hot-reloading to work inside Docker containers
     depends_on:
